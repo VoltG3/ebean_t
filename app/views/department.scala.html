@@ -1,4 +1,4 @@
-@(currentPage: io.ebean.PagedList[Computer],
+@(currentPage: io.ebean.PagedList[Department],
     currentSortBy: String,
     currentOrder: String,
     currentFilter: String)(
@@ -27,7 +27,7 @@
   }
 
   // Generate the link
-  routes.HomeController.list(newPage, sortBy, order, currentFilter)
+  routes.HomeControllerDepartment.list(newPage, sortBy, order, currentFilter)
 
 }
 
@@ -52,7 +52,7 @@
 
 @main {
 
- <h1 class="my-3" id="page-title">@Messages("computers.list.title", currentPage.getTotalCount)</h1>
+  <h1 class="my-3" id="page-title">@Messages("departments.list.title", currentPage.getTotalCount)</h1>
 
   @request.flash.asScala().get("success").map { successFlashValue =>
     <div class="alert alert-warning" role="alert">
@@ -64,16 +64,16 @@
     <div class="col-sm-6">
       <form class="form-inline" action="@link(0, "name")" method="GET">
         <div class="form-group mr-sm-2 mb-2">
-          <label for="searchbox" class="sr-only">Filter by computer name...</label>
-          <input type="search" class="form-control" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by computer name...">
+          <label for="searchbox" class="sr-only">Filter by department name...</label>
+          <input type="search" class="form-control" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by department name...">
         </div>
         <button type="submit" id="searchsubmit" class="btn btn-primary mb-2">Filter by name</button>
       </form>
     </div>
-    <div class="col-sm-6">
+   <!--  <div class="col-sm-6">
       <a href="@routes.HomeController.create()" id="add" class="btn btn-success float-right" role="button"1>Add a new computer</a>
-    </div>
-  </div>
+    </div> -->
+  </div> 
 
   @if(currentPage.getTotalCount == 0) {
 
@@ -86,36 +86,35 @@
     <table class="table table-bordered table-striped table-hover">
       <thead class="thead-light">
         <tr>
-          @header("name", "Computer name")
-          @header("introduced", "Introduced")
-          @header("discontinued", "Discontinued")
+          @header("name", "Department name")
+          @header("created_at", "Created at")
           @header("company.name", "Company")
         </tr>
       </thead>
       <tbody>
 
-      @for(computer <- currentPage.getList.asScala) {
+      @for(department <- currentPage.getList.asScala) {
         <tr>
-          <td><a href="@routes.HomeController.edit(computer.id)">@computer.name</a></td>
+
           <td>
-          @if(computer.introduced == null) {
-            <em>-</em>
+          @if(department.name == null) {
+              <em>-</em>
           } else {
-            @computer.introduced.format("dd MMM yyyy")
+              @department.name
           }
           </td>
           <td>
-          @if(computer.discontinued == null) {
+          @if(department.created_at == null) {
             <em>-</em>
           } else {
-            @computer.discontinued.format("dd MMM yyyy")
+            @department.created_at.format("dd MMM yyyy")
           }
           </td>
           <td>
-          @if(computer.company == null) {
+          @if(department.company == null) {
             <em>-</em>
           } else {
-            @computer.company.name
+            @department.company.name
           }
           </td>
         </tr>
